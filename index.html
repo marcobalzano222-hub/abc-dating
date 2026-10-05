@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ABC Dating</title>
+  <meta name="description" content="26 Dates von A bis Z – zu zweit planen, erleben, erinnern.">
+  <meta name="theme-color" content="#F5F1FA" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15172E" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ABC Dating">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="top">
+    <h1>abc<br>dating</h1>
+    <button class="icon" id="settingsBtn" aria-label="Einstellungen"><span class="dot" id="syncDot"></span>⚙︎</button>
+  </header>
+  <p class="sub" id="couple"></p>
+
+  <div class="progress"><b id="count">0</b><span>von 26 erlebt</span></div>
+  <div class="bar"><i id="barfill" style="width:0"></i></div>
+
+  <section class="draw">
+    <div class="drawTop">
+      <span class="drawL" id="drawL">?</span>
+      <div>
+        <small>Gezogener Buchstabe</small>
+        <div id="drawIdea">Noch nichts gezogen</div>
+        <button class="who" id="whoBtn" title="Wechseln"></button>
+      </div>
+    </div>
+    <div class="drawRow">
+      <button class="btn primary" id="drawBtn">Buchstabe ziehen</button>
+      <button class="btn ghost" id="planBtn">Planen</button>
+    </div>
+  </section>
+
+  <div class="grid" id="grid"></div>
+  <div class="legend">
+    <span style="--c:var(--line)">offen</span>
+    <span style="--c:var(--mint)">geplant</span>
+    <span style="--c:var(--rose)">erlebt</span>
+  </div>
+
+  <section class="memories">
+    <h2>Eure Erinnerungen</h2>
+    <div id="memList"></div>
+  </section>
+
+  <p class="status" id="status"></p>
+</main>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- Date bearbeiten -->
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetLetter">
+  <div class="sheet-head">
+    <span class="L" id="sheetLetter">A</span>
+    <span id="sheetHint" class="soft">Date mit A</span>
+    <button class="icon" data-close aria-label="Schließen">✕</button>
+  </div>
+
+  <p id="sheetPlanner" class="soft" style="margin:-6px 0 4px"></p>
+  <label for="fIdea">Was macht ihr?</label>
+  <input id="fIdea" placeholder="z. B. Aquarium besuchen">
+  <div class="chips" id="chips" style="margin-top:10px"></div>
+  <button class="link" id="moreBtn">Zufallsidee</button>
+
+  <label for="fDate">Wann?</label>
+  <input id="fDate" type="date">
+
+  <label>Status</label>
+  <div class="seg" id="seg">
+    <button data-s="open">offen</button>
+    <button data-s="planned">geplant</button>
+    <button data-s="done">erlebt</button>
+  </div>
+
+  <div id="doneFields">
+    <label>Wie war's?</label>
+    <div class="hearts" id="hearts"></div>
+    <label for="fNote">Erinnerung</label>
+    <textarea id="fNote" placeholder="Was soll in Erinnerung bleiben?"></textarea>
+  </div>
+
+  <div class="row">
+    <button class="btn ghost" id="resetBtn">Zurücksetzen</button>
+    <button class="btn primary" id="saveBtn">Speichern</button>
+  </div>
+</div>
+
+<!-- Einstellungen / Verbindung -->
+<div class="sheet" id="settings" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="sheet-head">
+    <h2 id="setTitle">Einstellungen</h2>
+    <button class="icon" data-close aria-label="Schließen">✕</button>
+  </div>
+
+  <h3>Ihr zwei</h3>
+  <div class="two">
+    <div><label for="p1">Person 1</label><input id="p1" autocomplete="off"></div>
+    <div><label for="p2">Person 2</label><input id="p2" autocomplete="off"></div>
+  </div>
+  <button class="btn ghost small" id="saveNames">Namen speichern</button>
+
+  <h3>Gemeinsam synchronisieren</h3>
+  <p class="soft" id="connInfo"></p>
+
+  <div id="connForm">
+    <label for="code">Verbindungscode (vom Partner-Handy)</label>
+    <textarea id="code" rows="2" placeholder="abc1.…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+    <details>
+      <summary>Oder manuell eingeben</summary>
+      <label for="cOwner">GitHub-Benutzername</label>
+      <input id="cOwner" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="marcobalzano222-hub">
+      <label for="cRepo">Daten-Repo</label>
+      <input id="cRepo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="abc-dating-data">
+      <label for="cToken">Token</label>
+      <input id="cToken" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_…">
+    </details>
+    <button class="btn primary small" id="connectBtn">Verbinden</button>
+  </div>
+
+  <div id="connActions" hidden>
+    <div class="row wrap">
+      <button class="btn ghost small" id="syncNow">Jetzt synchronisieren</button>
+      <button class="btn ghost small" id="copyCode">Code fürs Partner-Handy kopieren</button>
+    </div>
+    <p class="soft tiny">Den Code nur privat weitergeben (z. B. per AirDrop) – er enthält euren Zugangs-Token.</p>
+    <button class="link danger" id="disconnect">Verbindung auf diesem Gerät trennen</button>
+  </div>
+
+  <h3>Daten</h3>
+  <div class="row wrap">
+    <button class="btn ghost small" id="exportBtn">Export (JSON)</button>
+  </div>
+  <p class="soft tiny" id="version"></p>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
